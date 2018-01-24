@@ -1,7 +1,7 @@
 function mmqt_example_CZI()
 %
 % This example shows how to process a single Carl Zeiss Image (CZI) file
-% A valid CZI file, has to containing two color channels:
+% A valid CZI file, has to contain two color channels:
 %   1. Layer: DAPI staining of nuclei
 %   2. Layer: anti-Iba1 steining of microglia
 % If the order of color layers is different in your own data, please see

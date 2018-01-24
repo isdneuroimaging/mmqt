@@ -113,7 +113,12 @@ elseif length(sliceN)==1
 else
     D.sliceN = sliceN;    
 end
-
+idxOutOfRange = D.sliceN > sz(1:3);
+if any(idxOutOfRange)
+    warning('%s       \n%s', 'The selected cross-hair position is out of range!', 'Using the largest possible index instead!')
+    sliceNt = sz(1:3);
+    D.sliceN(idxOutOfRange) = sliceNt(idxOutOfRange);
+end
 %% Check whether image has any content
 if range(img(:))==0
     error(sprintf('\nRange of values in image equals 0!\n => Nothing to visualize!!!\n    Aborting program!!!'))
@@ -201,6 +206,7 @@ end
 %% Adjust color order
 if exist('colorOrder','var') && ~isempty(colorOrder) && size(img,4)==3
     img = img(:,:,:,colorOrder);
+    
 end
     
 %% Converting RGB to colormap
