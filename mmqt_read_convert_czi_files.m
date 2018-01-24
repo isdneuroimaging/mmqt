@@ -205,6 +205,10 @@ for iFn=1:length(fnamesCZI)
         meta.include = 1;
         meta.dateConverted = {date};
         
+        %% if a stacks has only one channel, the fiels "SizeC" might be missing in the metadata
+        if ~any(strcmp(meta.Properties.VariableNames, 'SizeC'))
+            meta.SizeC = 1;
+        end
     catch
         warning('%s\n         %s\n', 'Metadata could not be extracted!', 'Scaling of image will be assumed to be 1 micron in all directions!')
         meta = [cell2table({folder, basename},'VariableNames', {'Folder'; 'Basename'}),...
@@ -212,14 +216,23 @@ for iFn=1:length(fnamesCZI)
     end
 
     %% Create image matrix from data structure
-    %--- check meta data and, if incorrect, assume 2 color channels
+    %--- compare size of data to size in meta data and, if incorrect, assume 2 color channels
     if size(data{1},1) ~= meta.SizeZ * meta.SizeC
         warning('%s\n         %s\n', 'Number of Z-planes and color-channels in the meta data does not correspond to size of data portion!',...
                 'Assuming two color-channels and calculating the number of Z-planes accordingly!')
         meta.SizeC = 2;
         meta.SizeZ = size(data{1},1)/meta.SizeC;
-        meta.SizeX = size(data{1}{1,1},1);
-        meta.SizeY = size(data{1}{1,1},2);
+    end
+    flipXY=false;
+    if meta.SizeX ~= size(data{1}{1,1},1) || meta.SizeY ~= size(data{1}{1,1},2)
+        if meta.SizeX == size(data{1}{1,1},2) || meta.SizeY == size(data{1}{1,1},1)
+            flipXY=true;
+            % warning('%s\n         %s\n', 'SizeX and SizeY in meta-data and data-portion of the CZI-file are flipped!', 'Flipping dimensions of data portion!')
+        else
+            meta.SizeX = size(data{1}{1,1},1);
+            meta.SizeY = size(data{1}{1,1},2);
+            warning('%s\n         %s\n', 'SizeX and SizeY in meta-data do not correspond to the size of the first two dimensions of the data portion!','Adjusting met-data accordingly!')
+        end
     end
     %--- put data into 4D matrix
     k=0;
@@ -227,7 +240,11 @@ for iFn=1:length(fnamesCZI)
     for i=1:meta.SizeZ
         for j=1:meta.SizeC
             k=k+1;
-            img(:,:,i,j) = data{1}{k,1};
+            if flipXY
+                img(:,:,i,j) = data{1}{k,1}';
+            else
+                img(:,:,i,j) = data{1}{k,1};
+            end
         end
     end
     %--- order channels
