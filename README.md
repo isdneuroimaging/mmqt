@@ -10,9 +10,10 @@ The software will segment foreground from background, create a skeleton of the m
 segregate individual microglia cells and extract morphological features.
 
 For details see the method paper:
-Heindl S, Gesierich B, Benakis C, Llovera-Garcia G, Duering M, Liesz A
-**Automated Morphological Analysis of Microglia After Stroke**
-https://www.frontiersin.org/articles/10.3389/fncel.2018.00106
+Heindl S, Gesierich B, Benakis C, Llovera-Garcia G, Duering M, Liesz A  
+**Automated Morphological Analysis of Microglia After Stroke**  
+Front. Cell. Neurosci. 2018  
+https://www.frontiersin.org/articles/10.3389/fncel.2018.00106  
 
 This toolbox was developed at the Institute for Stroke and Dementia Research (ISD), 
 Munich, Germany. Please read the LICENSE file before using MMQT.
