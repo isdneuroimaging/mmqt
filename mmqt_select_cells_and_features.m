@@ -2,18 +2,22 @@ function mmqt_select_cells_and_features(trunk, figureHide)
 % function mmqt_select_cells_and_features(fnameCZI, figureHide)
 % function mmqt_select_cells_and_features(fnameMat, figureHide)
 %
-% Function selects cells according to certain criteria (see below) and, in
-% addition, it allows to keeps only shape features, according to a selection
-% specified in the file "mmqt_feature_selection.xlsx" in column "include".
+% Function selects cells, by checking certain exclusion criteria (see below) 
+% and, in addition, it allows to keep only shape features, according to a 
+% selection specified in the file "mmqt_feature_selection.xlsx" in column "include".
 %
-% Criteria for the selection of cells are:
-% 1. Cells are touching the border of the Z-stack and the center of the
-%   soma is closer than a certain threshold to this border. This threshold is
-%   15 micrometer for the lateral borders of the stack (X/Y direction), and
-%   8 micrometer for the bottom and top of the stack (Z direction).
-% 2. Cells are touching each other and the centers of their soma are closer
-%   together than 15 micrometer.
-% 3. Cells whos soma contains 2 nuclei, which migth be due to the fact,
+% Cells are excluded if they meet any of the following criteria:
+% 1. Cells are touching any border of the Z-stack and the center of the
+%   soma is too close to any of the touched border. The threshold for the 
+%   minimum allowed distance can be chosen using the variables "thrDistBorderXY" 
+%   and "thrDistBorderZ", defined below. Based on exploratory anayles, we 
+%   recommend following:
+%   at least 15 micrometer from the lateral borders of the stack (X/Y direction)
+%   at least 8 micrometer from the bottom and top of the stack (Z direction).
+% 2. Cells are touching each other and the centers of their soma are too 
+%   close together. The recommended minimum distance is at least 15
+%   micrometer and can be chosen using variable "thrDistCells" below.
+% 3. Cell contains 2 nuclei, which migth be due to the fact,
 %   that the soma of different cells are touching each other.
 %
 % 
